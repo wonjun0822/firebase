@@ -1,5 +1,11 @@
 import { fireInterface, authService } from "fireInterface";
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTwitter,
+  faGoogle,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
 
 const Auth = () => {
     const [email, setEmail] = useState('');
@@ -36,22 +42,32 @@ const Auth = () => {
             provider = new fireInterface.auth.GithubAuthProvider();
         }
 
-        const popup = await authService.signInWithPopup(provider);
+        await authService.signInWithPopup(provider);
     }
 
     return (
-        <>
-            <form onSubmit={onSubmit}>
-                <input name="email" type="email" placeholder="Email" value={email} required onChange={onChange} />
-                <input name="password" type="password" placeholder="PassWord" value={password} required onChange={onChange} />
-                <input type="submit" value="Sign in" />
+        <div className="authContainer">
+            <FontAwesomeIcon
+                icon={faTwitter}
+                color={"#04AAFF"}
+                size="3x"
+                style={{ marginBottom: 30 }}
+            />
+            <form onSubmit={onSubmit} className="container">
+                <input name="email" className="authInput" type="email" placeholder="Email" value={email} required onChange={onChange} />
+                <input name="password" className="authInput" type="password" placeholder="PassWord" value={password} required onChange={onChange} />
+                <input type="submit" className="authInput authSubmit" value="Sign in" />
             </form>
 
-            <>
-                <button name="google" onClick={onSocialClick}>Continue with Google</button>
-                <button name="git" onClick={onSocialClick}>Continue with Github</button>
-            </>
-        </>
+            <div className="authBtns">
+                <button onClick={onSocialClick} name="google" className="authBtn">
+                    Continue with Google <FontAwesomeIcon icon={faGoogle} />
+                </button>
+                <button onClick={onSocialClick} name="git" className="authBtn">
+                    Continue with Github <FontAwesomeIcon icon={faGithub} />
+                </button>
+            </div>
+        </div>
     )
 };
 

@@ -3,31 +3,37 @@ import AppRouter from 'components/Router';
 import { authService } from 'fireInterface';
 
 function App() {
-  const [init, setInit] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState(null);
+
+  const refreshUser = () => {
+    setUser({
+      displayName: authService.currentUser.displayName,
+      uid: authService.currentUser.uid,
+      email: authService.currentUser.email,
+      updateProfile: (args) => user.updateProfile(args)
+    });
+  };
 
   useEffect(() => {
       authService.onAuthStateChanged((user) => {
         if (user) {
-          setIsLogin(true);
-
-          setUser(user);
+          setUser({
+            displayName: user.displayName,
+            uid: user.uid,
+            email: user.email,
+            updateProfile: (args) => user.updateProfile(args)
+          });
         }
 
         else {
-          setIsLogin(false);
-
           setUser(null);
         }
-
-        setInit(true);
       });
   }, []);
 
   return (
     <>
-      <AppRouter isLogin={isLogin} user={user} />
+      <AppRouter refreshUser={refreshUser} isLogin={Boolean(user)} user={user} />
     </>
   );
 }
